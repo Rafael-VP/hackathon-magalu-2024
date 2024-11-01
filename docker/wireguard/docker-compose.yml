@@ -1,0 +1,27 @@
+version: '3.8'
+
+services:
+  wireguard:
+    image: linuxserver/wireguard
+    container_name: wireguard
+    cap_add:
+      - NET_ADMIN
+      - SYS_MODULE
+    environment:
+      - PUID=1000  # Adjust to your user ID
+      - PGID=1000  # Adjust to your group ID
+      - TZ=America/New_York  # Change to your timezone
+      - SERVERURL=yourdomain.com  # Replace with your domain or public IP
+      - SERVERPORT=51820  # WireGuard port
+      - PEERS=1  # Number of clients
+      - PEERDNS=auto  # Use auto or specify DNS server
+      - INTERNAL_SUBNET=10.13.13.0  # WireGuard network
+    volumes:
+      - ./config:/config
+      - /lib/modules:/lib/modules
+    ports:
+      - 51820:51820/udp
+    sysctls:
+      - net.ipv4.conf.all.src_valid_mark=1
+    restart: unless-stopped
+
