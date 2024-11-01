@@ -7,11 +7,19 @@ sudo apt upgrade -y
 # Install necessary packages
 sudo apt install -y apt-transport-https ca-certificates curl gnupg lsb-release git
 
-# Add Docker’s official GPG key
-curl -fsSL https://download.docker.com/linux/debian/gpg | sudo gpg --dearmor -o /usr/share/keyrings/docker-archive-keyring.gpg
+sudo install -m 0755 -d /etc/apt/keyrings
 
-# Set up the Docker stable repository
-echo "deb [arch=$(dpkg --print-architecture) signed-by=/usr/share/keyrings/docker-archive-keyring.gpg] https://download.docker.com/linux/debian $(lsb_release -cs) stable" | sudo tee /etc/apt/sources.list.d/docker.list > /dev/null
+# Add Docker’s official GPG key
+curl -fsSL https://download.docker.com/linux/ubuntu/gpg | sudo apt-key add -
+
+# Add the Docker repository to APT sources
+sudo add-apt-repository "deb [arch=amd64] https://download.docker.com/linux/ubuntu focal stable"
+
+# Update package database
+apt-cache policy docker-ce
+
+# Install docker
+sudo apt install -y docker-ce
 
 # Update package index and install Docker
 sudo apt update -y
